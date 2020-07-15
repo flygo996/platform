@@ -32,7 +32,7 @@ import 'nprogress/nprogress.css'
 /**
  * @name 声明子应用挂载dom，如果不需要做keep-alive，则只需要一个dom即可；
  */
-const appContainer = '#subapp-viewport'
+const appContainer = '#subapp-container'
 
 /**
  * @name 声明要传递给子应用的信息
@@ -58,18 +58,17 @@ const qianKunStart = list => {
    */
   const apps = [] // 子应用数组盒子
   let defaultApp = null // 默认注册应用路由前缀
-  const isDev = process.env.NODE_ENV === 'development' // 根据开发环境|线上环境加载不同entry
   list.forEach(o => {
     apps.push({
-      name: o.module,
-      entry: isDev ? o.devEntry : o.depEntry,
+      name: o.name,
+      entry: o.entry,
       container: appContainer,
-      activeRule: o.routerBase,
-      props: { ...props, routes: o.routes, routerBase: o.routerBase },
+      activeRule: o.activeRule,
+      props: { ...props, routes: o.routes },
     })
-    if (o.defaultRegister) defaultApp = o.routerBase
+    if (o.defaultRegister) defaultApp = o.activeRule
   })
-
+  console.log(apps)
   /**
    * @name 注册子应用
    * @param {Array} list subApps
@@ -77,20 +76,24 @@ const qianKunStart = list => {
   registerMicroApps(apps, {
     beforeLoad: [
       app => {
-        NProgress.start()
         console.log('[LifeCycle] beforeLoad... %c%s', 'color: green;', app.name)
         return Promise.resolve()
       },
     ],
     beforeMount: [
       app => {
+        NProgress.start()
         console.log('[LifeCycle] beforeMount... %c%s', 'color: green;', app.name)
+      },
+    ],
+    afterMount: [
+      app => {
+        NProgress.done()
+        console.log('[LifeCycle] afterMount... %c%s', 'color: green;', app.name)
       },
     ],
     afterUnmount: [
       app => {
-        // 加载微应用前，进度条加载完成
-        NProgress.done()
         console.log('[LifeCycle] afterUnmount... %c%s', 'color: green;', app.name)
       },
     ],

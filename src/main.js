@@ -1,11 +1,11 @@
 import Vue from 'vue'
 import ElementUI from 'element-ui'
-import qianKunStart from './core/registerMfe'
 
 import App from './App.vue'
 import './registerServiceWorker'
 import router from './router'
 import store from './store'
+import './micro'
 
 Vue.use(ElementUI)
 
@@ -16,5 +16,3 @@ new Vue({
   store,
   render: h => h(App),
 }).$mount('#app')
-
-qianKunStart()

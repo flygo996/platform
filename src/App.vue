@@ -2,8 +2,10 @@
   <div id="main-container">
     <div id="nav">
       <router-link to="/">Home</router-link>|
-      <router-link to="/about">About</router-link>
+      <router-link to="/dice">dice</router-link>|
+      <router-link to="/mine">mine</router-link>
     </div>
+    <div id="subapp-container"></div>
     <router-view />
   </div>
 </template>
